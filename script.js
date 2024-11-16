@@ -1,6 +1,6 @@
-import Player from "./player.js";
-import Enemy from "./enemy.js";
-import Field from "./field.js";
+import Player from "./model/Player.js";
+import Enemy from "./model/Enemy.js";
+import Field from "./Field.js";
 
 window.addEventListener('load', start);
 
