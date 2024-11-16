@@ -4,8 +4,8 @@ export default class Enemy extends Character {
     constructor(config) {
         super({
             id: "enemy",
-            x: 287,
-            y: 1,
+            x: 250,
+            y: 50,
             speed: 100,
             ...config,
             enemy: true,

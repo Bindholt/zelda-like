@@ -20,6 +20,11 @@ function start() {
         } else {
             player.movementCycle = 0;
         }
+        if(enemy.controls.up || enemy.controls.down || enemy.controls.left || enemy.controls.right) {
+            enemy.cycleMovement();
+        } else {
+            enemy.movementCycle = 0;
+        }
     },100);
 }
 
@@ -29,21 +34,67 @@ function tick(time) {
     requestAnimationFrame(tick);
     const deltaTime = (time - lastTime)/1000;
     lastTime = time;
+    playerMovement(deltaTime);
+    enemyMovement(deltaTime);
+}
+
+function playerMovement(deltaTime) {
     player.look();
     player.move(deltaTime, field);
-    if(player.isCollidingWith(enemy)) {
+    if (player.isCollidingWith(enemy)) {
         player.element.style.backgroundColor = "red";
     } else {
         player.element.style.backgroundColor = "";
     }
-    displayPlayer();
+    displayCharacter(player);
 }
 
-function displayPlayer() {
-    player.element.style.translate = `${player.x}px ${player.y}px`;
-    player.element.style.backgroundPositionX = player.movementCycle * 100 + '%';
+function displayCharacter(character) {
+    character.element.style.translate = `${character.x}px ${character.y}px`;
+    character.element.style.backgroundPositionX = character.movementCycle * 100 + '%';
 }
 
+let pathCycle = 0;
+function enemyMovement(deltaTime) {
+    const path = [
+        { x: 250, y: 50 },
+        { x: 100, y: 50 }
+    ];
+
+    console.log("Path Cycle:", pathCycle);
+
+    enemy.look();
+
+    if (pathCycle === 0) {
+        enemy.controls = {
+            up: false,
+            down: false,
+            left: true,
+            right: false,
+        };
+        enemy.move(deltaTime, field);
+
+        if (enemy.x <= path[1].x) {
+            pathCycle = 1;
+        }
+    }
+
+    else if (pathCycle === 1) {
+        enemy.controls = {
+            up: false,
+            down: false,
+            left: false,
+            right: true,
+        };
+        enemy.move(deltaTime, field);
+
+        if (enemy.x >= path[0].x) {
+            pathCycle = 0;
+        }
+    }
+
+    displayCharacter(enemy);
+}
 
 function attatchEventListeners() {
     window.addEventListener("keydown", (e) => {

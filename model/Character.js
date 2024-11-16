@@ -27,7 +27,7 @@ export default class Character {
     }
 
     updatePosition() {
-        this.element.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this.element.style.translate = `${this.x}px, ${this.y}px`;
     }
 
     cycleMovement() {

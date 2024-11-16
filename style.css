@@ -1,7 +1,7 @@
 #gamefield {
     width: 320px;
     height: 320px;
-    background-color: #242424;
+    background-color: #fff176;
     border: 2px solid #44a300;
     position: relative;
 }
@@ -14,6 +14,7 @@
     background-position-x: 0px;
     background-position-y: 0px;
     image-rendering: pixelated;
+    position:absolute;
 }
 
 #enemy {
@@ -24,7 +25,8 @@
     background-position-x: 0px;
     background-position-y: 0px;
     image-rendering: pixelated;
-    translate: 0px -40px;
+    position:absolute;
+    /* translate: 0px -40px; */
 }
 
 .animation_1 {
