@@ -9,6 +9,6 @@ export default class Enemy extends Character {
             speed: 100,
             ...config,
             enemy: true,
-        });
+        }); 
     }
 }
