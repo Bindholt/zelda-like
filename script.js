@@ -1,6 +1,6 @@
 import Player from "./model/Player.js";
 import Enemy from "./model/Enemy.js";
-import Field from "./Field.js";
+import Field from "./model/Field.js";
 
 window.addEventListener('load', start);
 
