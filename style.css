@@ -14,7 +14,17 @@
     background-position-x: 0px;
     background-position-y: 0px;
     image-rendering: pixelated;
-    translate: 0px 0px;
+}
+
+#enemy {
+    width: 32px;
+    height: 40px; 
+    background-image: url('enemy.png');
+    background-size: 400%;
+    background-position-x: 0px;
+    background-position-y: 0px;
+    image-rendering: pixelated;
+    translate: 0px -40px;
 }
 
 .animation_1 {
