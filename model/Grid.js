@@ -1,0 +1,189 @@
+export default class Grid {
+    grid = [];
+    rowNum;
+    colNum;
+    tileSize = 32;
+    width;
+    height;
+    
+    constructor(rowNum, colNum) {
+        this.rowNum = rowNum;
+        this.colNum = colNum;
+        this.grid = [];
+        for (let i = 0; i < this.rowNum; i++) {
+            this.grid[i] = [];
+            for (let j = 0; j < this.colNum; j++) {
+                this.grid[i][j] = 0;
+            }
+        }
+
+        this.width = this.colNum * this.tileSize;
+        this.height = this.rowNum * this.tileSize;
+    }
+
+    loadMap(map) {
+        for (let i = 0; i < this.rowNum; i++) {
+            for (let j = 0; j < this.colNum; j++) {
+                this.grid[i][j] = map[i][j];
+            }
+        }
+    }
+
+    getTileCoordUnder({x,y}) {
+        return this.coordFromPos({x,y});
+    }
+
+    getTileAtCoord({row, col}) {    
+        return this.get(row, col);
+    }
+
+    getTileAtPos({x,y}) {
+        const {row,col} = this.coordFromPos({x,y});
+        return this.get(row, col);
+    }
+
+    coordFromPos({x,y}) {
+        const row = Math.floor(y / this.tileSize);
+        const col = Math.floor(x / this.tileSize);
+
+        return {row, col};
+    }
+
+    posFromCoord({row, col}) {
+        const x = col * this.tileSize;
+        const y = row * this.tileSize;
+        return {x, y};
+    }
+
+    insertAtIndex(element, i) {
+        const [row, col] = this.getRowAndColFromIndex(i);
+        this.writeToCell(element, row, col)
+    }
+
+    set(row, col, value) {
+        this.grid[row][col] = value;
+    }
+
+    get(row, col) {
+        return this.grid[row][col];
+    }
+
+    cell(row, col) {
+        return {row, col, value: this.get(row, col)};
+    }
+
+    indexFor(row, col) {
+        if (row < 0 || row >= this.rowNum || col < 0 || col >= this.colNum) {
+            return -1;
+        }
+        return row * this.colNum + col;
+    }
+
+    rowColFor(i) {
+        let row = Math.floor(i / this.colNum);
+        let col = i % this.colNum;
+
+        return {row, col};
+    }
+
+    neighbours(row,col) {
+        return [
+            this.north(row,col),
+            this.east(row,col),
+            this.south(row,col),
+            this.west(row,col),
+            this.northEast(row,col),
+            this.northWest(row,col),
+            this.southEast(row,col),
+            this.southWest(row,col)
+        ];
+    }
+
+    neighbourValues(row,col) {
+        return this.neighbours(row,col).map(cell => cell.value);
+    }
+
+    north(row,col){
+        const nRow = (row - 1 + this.rowNum) % this.rowNum;
+        const nCol = col;
+        return this.cell(nRow, nCol);
+    }
+
+    east(row, col) {
+        const eRow = row;
+        const eCol = (col + 1) % this.colNum;
+        return this.cell(eRow, eCol);
+    }
+
+    south(row, col) {
+        const sRow = (row + 1) % this.rowNum;
+        const sCol = col;
+        return this.cell(sRow, sCol);
+    }
+
+    west(row, col) {
+        const wRow = row;
+        const wCol = (col - 1 + this.colNum) % this.colNum;
+        return this.cell(wRow, wCol);
+    }
+
+    northEast(row,col){
+        const NERow = (row - 1 + this.rowNum) % this.rowNum;
+        const NECol = (col + 1) % this.colNum;
+        return this.cell(NERow,NECol);
+    }
+
+    northWest(row,col){
+        const NWRow = (row - 1 + this.rowNum) % this.rowNum;
+        const NWCol = (col - 1 + this.colNum) % this.colNum;
+        return this.cell(NWRow,NWCol);
+    }
+
+    southEast(row, col) {
+        const SERow = (row + 1) % this.rowNum;
+        const SECol = (col + 1) % this.colNum;
+        return this.cell(SERow, SECol);
+    }
+
+    southWest(row, col) {
+        const SWRow = (row + 1) % this.rowNum;
+        const SWCol = (col - 1 + this.colNum) % this.colNum;
+        return this.cell(SWRow, SWCol);
+    }
+
+    nextInRow(row, col) {
+        return this.east(row, col);
+    }
+
+    nextInCol(row, col) {
+        return this.south(row, col);
+    }
+
+    rows() {
+        return this.rowNum;
+    }
+
+    cols() {
+        return this.colNum;
+    }
+
+    size() {
+        return this.rowNum * this.colNum;
+    }
+
+    fill(value) {
+        for (let i = 0; i < this.rowNum; i++) {
+            for (let j = 0; j < this.colNum; j++) {
+                this.grid[i][j] = value;
+            }
+        }
+    }
+
+    dump() {
+        console.table(this.grid);
+    }
+
+    clear() {
+        this.fill(0);
+    }
+}
