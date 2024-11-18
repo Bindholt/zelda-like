@@ -4,7 +4,7 @@ export default class Player extends Character{
     constructor(config){
         super({
             id: "player",
-            x: config?.x ?? 0,
+            x: config?.x ?? 50,
             y: config?.y ?? 150,
             speed: config?.speed ?? 100,
             ...config,

@@ -233,10 +233,17 @@ function getVisualTileFromCoords({row, col}) {
 
 function showDebugging() {
     debugShowTileUnder(player);
-    debugShowPlayerRegPoint(player);
+    debugShowHitbox(player);
 }
 
-function debugShowPlayerRegPoint(character) {
+function debugShowRegPoint(character) {
     character.element.style.setProperty("--regX", character.regX + "px");
     character.element.style.setProperty("--regY", character.regY + "px");
+}
+
+function debugShowHitbox(character) {
+    character.element.style.setProperty("--hitboxX", character.hitbox.x + "px");
+    character.element.style.setProperty("--hitboxY", character.hitbox.y + "px");
+    character.element.style.setProperty("--hitboxWidth", character.hitbox.width + "px");
+    character.element.style.setProperty("--hitboxHeight", character.hitbox.height + "px");
 }

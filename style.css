@@ -120,3 +120,13 @@ body {
     height: 3px;
     translate: var(--regX) var(--regY);
 }
+
+.show-hitbox::after {
+    content: "";
+    position: absolute;
+    width: var(--hitboxWidth);
+    height: var(--hitboxHeight);
+    translate: var(--hitboxX) var(--hitboxY);
+
+    outline: 2px solid red;
+}
