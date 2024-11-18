@@ -4,9 +4,9 @@ export default class Player extends Character{
     constructor(config){
         super({
             id: "player",
-            x: 0,
-            y: 0,
-            speed: 100,
+            x: config?.x ?? 0,
+            y: config?.y ?? 150,
+            speed: config?.speed ?? 100,
             ...config,
             enemy: false,
         });

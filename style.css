@@ -1,15 +1,26 @@
+body {
+    background-color: grey;
+}
+
 #gamefield {
-    width: 320px;
-    height: 320px;
-    background-color: #fff176;
+    /* max-width: calc((var(--TILE_SIZE) * 1px) * var(--GRID_WIDTH));
+    /* width: calc(32px * 16); */
+    /* height: calc((var(--TILE_SIZE) * 1px) * var(--GRID_HEIGHT)); */ 
+    /* height: calc(32px * 9); */
     border: 2px solid #44a300;
-    position: relative;
+    width:fit-content;
+}
+
+#background {
+    display:grid;
+    grid-template-columns: repeat(var(--GRID_WIDTH), max-content);
+    position:absolute;
 }
 
 #player {
     width: 32px;
     height: 40px; 
-    background-image: url('player.png');
+    background-image: url('./images/character/player.png');
     background-size: 400%;
     background-position-x: 0px;
     background-position-y: 0px;
@@ -20,13 +31,60 @@
 #enemy {
     width: 32px;
     height: 40px; 
-    background-image: url('enemy.png');
+    background-image: url('./images/character/enemy.png');
     background-size: 400%;
     background-position-x: 0px;
     background-position-y: 0px;
     image-rendering: pixelated;
     position:absolute;
-    /* translate: 0px -40px; */
+}
+
+.tile {
+    width: calc(var(--TILE_SIZE) * 1px);
+    aspect-ratio: 1/1;
+    image-rendering: pixelated;
+}
+
+.flowers {
+    background-image: url('./images/tile/flowers.png');
+}
+
+.path {
+    background-image: url('./images/tiles/path.png');
+}
+
+.wall {
+    background-image: url('./images/tiles/wall.png');
+}
+
+.door {
+    background-image: url('./images/tiles/door.png');
+    background-size: 100%;
+    background-position-x: 0px;
+    background-position-y: 0px;
+}
+
+.water {
+    background-image: url('./images/tiles/water.png');
+}
+
+.tree {
+    background-image: url('./images/tiles/tree.png');
+    background-size: 100%;
+    background-position-x: 0px;
+    background-position-y: 0px;
+}
+
+.floor_wood {
+    background-image: url('./images/tiles/floor_wood.png');
+}
+
+.grass {
+    background-image: url('./images/tiles/grass.png');
+}
+
+.bridge {
+    background-image: url('./images/tiles/floor_planks.png');
 }
 
 .animation_1 {
@@ -43,4 +101,22 @@
 
 .animation_4 {
     background-position-x: 96px;
+}
+
+.highlight {
+    outline: 2px dashed #fffb00;
+    translate: 0 0;
+}
+
+.show-rect {
+    outline: 2px solid red;
+}
+
+.show-reg-point::before {
+    content: "";
+    position : absolute;
+    background-color: red;
+    width: 3px;
+    height: 3px;
+    translate: var(--regX) var(--regY);
 }
