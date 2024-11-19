@@ -49,7 +49,7 @@ export default class Character {
         if (this.controls.right) this.element.style.backgroundPositionY = "40px";
     }
 
-    move(deltaTime, grid) {
+    move(deltaTime, grid, itemsGrid) {
         const newPos = { x: this.x, y: this.y };
         
         if (this.controls.up) newPos.y -= this.speed * deltaTime;
@@ -58,30 +58,33 @@ export default class Character {
         if (this.controls.right) newPos.x += this.speed * deltaTime;
     
         // Check each corner for passability
-        const topleft = { x: newPos.x - this.regX + this.hitbox.x, y: newPos.y - this.regY + this.hitbox.y };
-        const topright = { x: topleft.x + this.hitbox.width, y: topleft.y };
-        const bottomleft = { x: topleft.x, y: topleft.y + this.hitbox.height };
-        const bottomright = { x: topright.x, y: bottomleft.y };
-    
+        const { topleft, topright, bottomleft, bottomright } = this.hitboxCorners(newPos);
+        
         if (
-            this.canMove(topleft, grid)
-            && this.canMove(topright, grid)
-            && this.canMove(bottomleft, grid)
-            && this.canMove(bottomright, grid)
+            this.canMove(topleft, grid, itemsGrid)
+            && this.canMove(topright, grid, itemsGrid)
+            && this.canMove(bottomleft, grid, itemsGrid)
+            && this.canMove(bottomright, grid, itemsGrid)
         ) {
             this.x = newPos.x;
             this.y = newPos.y;
         }
     }
+
+    hitboxCorners(pos) {
+        const topleft = { x: pos.x - this.regX + this.hitbox.x, y: pos.y - this.regY + this.hitbox.y };
+        const topright = { x: topleft.x + this.hitbox.width, y: topleft.y };
+        const bottomleft = { x: topleft.x, y: topleft.y + this.hitbox.height };
+        const bottomright = { x: topright.x, y: bottomleft.y };
+
+        return { topleft, topright, bottomleft, bottomright };
+    }
     
 
-    canMove(newPos, grid) {
+    canMove(newPos, grid, itemsGrid) {
         const { row, col } = grid.getTileCoordUnder(newPos);
     
-        // Check if the position is within the grid bounds
         if (row < 0 || row >= grid.rows() || col < 0 || col >= grid.cols()) return false;
-    
-        // Retrieve the tile value and check for impassable tiles
         const tileValue = grid.getTileAtCoord({ row, col });
         switch (tileValue) {
             case 2:
@@ -90,51 +93,16 @@ export default class Character {
             case 6:
                 return false;
         }
+
+        const itemValue = itemsGrid.getTileAtCoord({ row, col });
+        switch (itemValue.type) {
+            case 1:
+            case 4:
+                return false;
+        }
     
-        return true; // Move is possible if no checks failed
+        return true;
     }
-    
-
-    // move(deltaTime, grid) {
-    //     const newPos = { x: this.x, y: this.y };
-    //     if (this.controls.up) newPos.y -= this.speed * deltaTime;
-    //     if (this.controls.down) newPos.y += this.speed * deltaTime;
-    //     if (this.controls.left) newPos.x -= this.speed * deltaTime;
-    //     if (this.controls.right) newPos.x += this.speed * deltaTime;
-
-
-    //     //check if topleft corner of hitbox can move
-    //     this.topleft = { x: newPos.x + this.hitbox.x, y: newPos.y + this.hitbox.y };
-    //     this.topright = { x: this.topleft.x + this.hitbox.width, y: this.topleft.y };
-    //     this.bottomleft = { x: this.topleft.x, y: this.topleft.y + this.hitbox.height };
-    //     this.bottomright = { x: this.topright.x, y: this.bottomleft.y };
-
-    //     if (this.canMove(this.topleft, grid) && this.canMove(this.topright, grid) && this.canMove(this.bottomleft, grid) && this.canMove(this.bottomright, grid)) {
-    //         this.x = newPos.x;
-    //         this.y = newPos.y;
-    //     }
-    //     // if (this.canMove(newPos, grid)) {
-    //     //     this.x = newPos.x;
-    //     //     this.y = newPos.y;
-    //     // }
-    // }
-
-    // canMove(newPos, grid) {
-    //     const {row, col} = grid.getTileCoordUnder(newPos);
-
-    //     if(row < 0 || row >= grid.rows() || col < 0 || col >= grid.cols()) return false;
-
-    //     const tileValue = grid.getTileAtCoord({row, col});
-    //     switch(tileValue) {
-    //         case 2:
-    //         case 3:
-    //         case 5:
-    //         case 6:
-    //             return false;
-    //     }
-
-    //     return true;
-    // }
 
     setControls(controls) {
         this.controls = controls;

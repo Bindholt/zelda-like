@@ -9,12 +9,23 @@ body {
     /* height: calc(32px * 9); */
     border: 2px solid #44a300;
     width:fit-content;
+    position: relative;
 }
 
 #background {
     display:grid;
     grid-template-columns: repeat(var(--GRID_WIDTH), max-content);
     position:absolute;
+    z-index: -2;
+}
+
+#items {
+    display:grid;
+    grid-template-columns: repeat(var(--GRID_WIDTH), max-content);
+    position:absolute;
+    background-color: transparent; 
+    image-rendering: pixelated;
+    z-index: -1;
 }
 
 #player {
@@ -58,7 +69,7 @@ body {
 }
 
 .door {
-    background-image: url('./images/tiles/door.png');
+    background-image: url('./images/items/door.png');
     background-size: 100%;
     background-position-x: 0px;
     background-position-y: 0px;
@@ -85,6 +96,32 @@ body {
 
 .bridge {
     background-image: url('./images/tiles/floor_planks.png');
+}
+
+.pot {
+    background-image: url('./images/items/pot.png');
+    background-size: contain; 
+
+}
+
+.pot_smashed {
+    background-image: url('./images/items/pot_smashed.png');
+    background-size: contain; 
+}
+
+.chest {
+    background-image: url('./images/items/chest.png');
+}
+
+.closed_door {
+    background-image: url('./images/items/door.png');
+    background-size: 100%;
+    translate: 0 0;
+    image-rendering: pixelated;
+}
+
+.empty {
+    background-image: url('');
 }
 
 .animation_1 {
@@ -129,4 +166,14 @@ body {
     translate: var(--hitboxX) var(--hitboxY);
 
     outline: 2px solid red;
+}
+
+
+.interact-prompt {
+    position: absolute;
+    font-size : 12px;
+    border-radius: 10px;
+    padding: 5px;
+    translate: 30px 40px;
+    background-color: rgb(241, 241, 241);
 }

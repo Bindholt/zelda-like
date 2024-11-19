@@ -1,19 +1,25 @@
 import Player from "./model/Player.js";
 import Enemy from "./model/Enemy.js";
 import Grid from "./model/Grid.js";
-import level1 from "./model/maps/map1.js";
+import {map as level1, tileTypes } from "./model/maps/map1.js";
+import {items as itemsLevel1, itemTypes} from "./model/maps/items1.js";
 
 window.addEventListener('load', start);
 
 let player;
 let enemy;
 let grid;
+let itemsGrid;
+let currentInteractable;
 function start() {
     player = new Player();
     enemy = new Enemy();
     grid = new Grid(9, 16);
+    itemsGrid = new Grid(9, 16);
     grid.loadMap(level1);
+    itemsGrid.loadMap(itemsLevel1);
     createTiles();
+    createItems();
     requestAnimationFrame(tick);
     attatchEventListeners();
 
@@ -32,6 +38,7 @@ function start() {
 
     /* DEBUG */
     window.grid = grid;
+    window.itemsGrid = itemsGrid;
     window.player = player;
     window.enemy = enemy;
     window.showDebugging = showDebugging;
@@ -47,17 +54,33 @@ function tick(time) {
     displayCharacter(enemy);
     //enemyMovement(deltaTime);
     displayTiles();
-    showDebugging();
+    displayItems();
+    //showDebugging();
 }
 
 function playerMovement(deltaTime) {
     player.look();
-    player.move(deltaTime, grid);
+    player.move(deltaTime, grid, itemsGrid);
     if (player.isCollidingWith(enemy)) {
         player.element.style.backgroundColor = "red";
     } else {
         player.element.style.backgroundColor = "";
     }
+
+    const interactableItem = player.isCollidingWithItem(itemsGrid);
+    
+    if(interactableItem) {
+        if(document.querySelectorAll(".interact-prompt").length === 0) {
+        const interactPrompt = document.createElement("div");
+        interactPrompt.classList.add("interact-prompt");
+        interactPrompt.textContent = "Press E to interact";
+        player.element.appendChild(interactPrompt);
+        currentInteractable = interactableItem;
+    }} else {
+        document.querySelectorAll(".interact-prompt").forEach(prompt => prompt.remove());
+        currentInteractable = null;
+    }
+    
     displayCharacter(player);
 }
 
@@ -77,7 +100,7 @@ function enemyMovement(deltaTime) {
             left: true,
             right: false,
         };
-        enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize});
+        enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize}, itemsGrid);
 
         if (enemy.x <= path[1].x) {
             pathCycle = 1;
@@ -91,7 +114,7 @@ function enemyMovement(deltaTime) {
             left: false,
             right: true,
         };
-        enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize});
+        enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize}, itemsGrid);
 
         if (enemy.x >= path[0].x) {
             pathCycle = 0;
@@ -102,7 +125,7 @@ function enemyMovement(deltaTime) {
 }
 
 
-//* VIEW */
+/* VIEW */
 
 function attatchEventListeners() {
     window.addEventListener("keydown", (e) => {
@@ -123,6 +146,8 @@ function attatchEventListeners() {
             case "ArrowDown":
                 player.controls.down = true;
                 break;
+            case "e":
+                interact();
         }
     });
 
@@ -148,9 +173,64 @@ function attatchEventListeners() {
     });
 }
 
+function interact() {
+    if(currentInteractable) {
+        //If pot, add whats inside pot to inventory and smash pot
+        if(currentInteractable.type === 1 && currentInteractable.inventory.length > 0) {
+            player.addToInventory(currentInteractable.inventory);
+            currentInteractable.inventory = [];
+            currentInteractable.type = 3; //smashed pot
+            return;
+        }
+
+        //if door, check if player has key in inventory, then open door
+        if(currentInteractable.type === 4 && player.inventory.includes("key")) {
+            currentInteractable.type = 0;
+            return;
+        } else {
+            console.log("You need a key to open this door");
+        }
+
+    }
+}
+
 function displayCharacter(character) {
     character.element.style.translate = `${character.x - character.regX}px ${character.y - character.regY}px`;
     character.element.style.backgroundPositionX = character.movementCycle * 100 + '%';
+}
+
+
+function createItems() {
+    const itemLayer = document.querySelector("#items");
+    itemLayer.style.setProperty("--GRID_WIDTH", itemsGrid.cols());
+    for (let i = 0; i < itemsGrid.rows(); i++) {
+        for (let j = 0; j < itemsGrid.cols(); j++) {
+            const item = document.createElement("div");
+            item.classList.add("item");
+            item.style.width = itemsGrid.tileSize + "px";
+            item.style.height = itemsGrid.tileSize + "px";
+            itemLayer.appendChild(item);
+        }
+    }
+}
+
+function displayItems() {
+    const visualTiles = document.querySelectorAll(".item");
+
+    for(let row = 0; row < itemsGrid.rows(); row++) {
+        for(let col = 0; col < itemsGrid.cols(); col++) {
+            const index = row * itemsGrid.cols() + col;
+            const visualTile = visualTiles[index];
+            const tile = itemsGrid.getTileAtCoord({row, col});
+            if(tile!=0) {
+                visualTile.classList.add(getClassForItemType(tile.type));
+            }
+        }
+    }
+}
+
+function getClassForItemType(type) {
+    return itemTypes[type];
 }
 
 function createTiles() {
@@ -180,26 +260,7 @@ function displayTiles() {
 }
 
 function getClassForTileType(type) {
-    switch(type) {
-        case 0:
-            return "grass";
-        case 1:
-            return "path";
-        case 2:
-            return "wall";
-        case 3:
-            return "water";
-        case 4:
-            return "bridge";
-        case 5:
-            return "tree";
-        case 6:
-            return "door";
-        case 7:
-            return "floor_wood";
-        case 8:
-            return "flowers";
-    }
+    return tileTypes[type];
 }
 
 
@@ -232,7 +293,8 @@ function getVisualTileFromCoords({row, col}) {
 }
 
 function showDebugging() {
-    debugShowTileUnder(player);
+    //debugShowTileUnder(player);
+    //debugShowRegPoint(player);
     debugShowHitbox(player);
 }
 
