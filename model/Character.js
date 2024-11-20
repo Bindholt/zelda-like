@@ -114,4 +114,16 @@ export default class Character {
             this.y < character.y + character.height &&
             this.y + this.height > character.y;
     }
+
+    talk(msg){
+        const talkBubble = document.createElement("div");
+        talkBubble.classList.add("talk-bubble");
+        talkBubble.textContent = msg;
+
+        this.element.appendChild(talkBubble);
+
+        setTimeout(() => {
+            talkBubble.remove();
+        }, 2000);
+    }
 }

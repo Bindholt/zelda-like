@@ -1,12 +1,13 @@
+
 body {
     background-color: grey;
 }
 
+#gameflex {
+    display: flex;
+}
+
 #gamefield {
-    /* max-width: calc((var(--TILE_SIZE) * 1px) * var(--GRID_WIDTH));
-    /* width: calc(32px * 16); */
-    /* height: calc((var(--TILE_SIZE) * 1px) * var(--GRID_HEIGHT)); */ 
-    /* height: calc(32px * 9); */
     border: 2px solid #44a300;
     width:fit-content;
     position: relative;
@@ -54,6 +55,14 @@ body {
     width: calc(var(--TILE_SIZE) * 1px);
     aspect-ratio: 1/1;
     image-rendering: pixelated;
+    background-size: 100% 100%;
+}
+
+.item {
+    width: calc(var(--TILE_SIZE) * 1px);
+    aspect-ratio: 1/1;
+    image-rendering: pixelated;
+    background-size: 100% 100%;
 }
 
 .flowers {
@@ -70,9 +79,6 @@ body {
 
 .door {
     background-image: url('./images/items/door.png');
-    background-size: 100%;
-    background-position-x: 0px;
-    background-position-y: 0px;
 }
 
 .water {
@@ -81,9 +87,6 @@ body {
 
 .tree {
     background-image: url('./images/tiles/tree.png');
-    background-size: 100%;
-    background-position-x: 0px;
-    background-position-y: 0px;
 }
 
 .floor_wood {
@@ -100,13 +103,11 @@ body {
 
 .pot {
     background-image: url('./images/items/pot.png');
-    background-size: contain; 
 
 }
 
 .pot_smashed {
-    background-image: url('./images/items/pot_smashed.png');
-    background-size: contain; 
+    background-image: url('./images/items/pot_smashed.png'); 
 }
 
 .chest {
@@ -115,9 +116,6 @@ body {
 
 .closed_door {
     background-image: url('./images/items/door.png');
-    background-size: 100%;
-    translate: 0 0;
-    image-rendering: pixelated;
 }
 
 .empty {
@@ -168,12 +166,35 @@ body {
     outline: 2px solid red;
 }
 
-
 .interact-prompt {
     position: absolute;
     font-size : 12px;
     border-radius: 10px;
+    width: 30px;
     padding: 5px;
-    translate: 30px 40px;
+    translate: -30px 40px;
     background-color: rgb(241, 241, 241);
+}
+
+.talk-bubble {
+    position: absolute;
+    font-size : 12px;
+    border-radius: 10px;
+    width: 100px;
+    padding: 5px;
+    translate: 30px -15px;
+    background-color: rgb(241, 241, 241);
+}
+
+#inventory {
+    font-size: smaller;
+    translate: 550px 0;
+    position:absolute;
+} 
+
+#inventory-items {
+    width: 150px;
+    height: 270px;
+    background-color: rgb(163, 163, 163);
+    outline: 2px solid black;
 }
