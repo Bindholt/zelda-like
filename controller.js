@@ -12,17 +12,36 @@ let enemy;
 let grid;
 let itemsGrid;
 let currentInteractable;
+let lastAnimationFrame;
 function start() {
-    player = new Player();
-    enemy = new Enemy();
+    initializeLevel();
+    /* DEBUG */
+    window.grid = grid;
+    window.itemsGrid = itemsGrid;
+    window.player = player;
+    window.enemy = enemy;
+    window.showDebugging = view.showDebugging;
+    window.view = view;
+    window.initializeLevel = initializeLevel;
+}
+
+
+function initializeLevel() {
+    resetGameState() 
     grid = new Grid(9, 16);
     itemsGrid = new Grid(9, 16);
     grid.loadMap(level1);
     itemsGrid.loadMap(itemsLevel1);
+    player = new Player();
+    const {x, y} = getRandomStartingPosition();
+    player.x = x;
+    player.y = y;
+    enemy = new Enemy();
+
     view.createTiles(grid);
     view.createItems(itemsGrid);
-    requestAnimationFrame(tick);
     view.attatchEventListeners();
+    lastAnimationFrame = requestAnimationFrame(tick);
 
     setInterval(() => {
         if(player.controls.up || player.controls.down || player.controls.left || player.controls.right) {
@@ -36,14 +55,24 @@ function start() {
             enemy.movementCycle = 0;
         }
     },100);
+}
 
-    /* DEBUG */
-    window.grid = grid;
-    window.itemsGrid = itemsGrid;
-    window.player = player;
-    window.enemy = enemy;
-    window.showDebugging = view.showDebugging;
-    window.view = view;
+function resetGameState() {
+    // Cancel animation frame (if any)
+    cancelAnimationFrame(lastAnimationFrame);
+    
+    // Clear player and enemy references
+    player = null;
+    enemy = null;
+
+    
+    // Reset other global state variables if needed
+    currentInteractable = null;
+    lastTime = 0;
+    pathCycle = 0;
+    grid = null;
+    itemsGrid = null;
+
 }
 
 let lastTime = 0;
@@ -151,6 +180,23 @@ function interact() {
 
     }
 }
+
+function getRandomStartingPosition() {
+    const x = Math.floor(Math.random() * grid.width);
+    const y = Math.floor(Math.random() * grid.height);
+    const isNotInHouse = (!(x > 360 && y < 125)); 
+    const { topleft, topright, bottomleft, bottomright } = player.hitboxCorners({ x, y });
+    if(player.canMove(topleft, grid, itemsGrid)
+        && player.canMove(topright, grid, itemsGrid)
+        && player.canMove(bottomleft, grid, itemsGrid)
+        && player.canMove(bottomright, grid, itemsGrid)
+        && isNotInHouse) {
+        return {x, y};
+    }
+
+    return getRandomStartingPosition();
+}
+
 
 export {
     interact,

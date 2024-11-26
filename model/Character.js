@@ -50,24 +50,35 @@ export default class Character {
     }
 
     move(deltaTime, grid, itemsGrid) {
-        const newPos = { x: this.x, y: this.y };
-        
-        if (this.controls.up) newPos.y -= this.speed * deltaTime;
-        if (this.controls.down) newPos.y += this.speed * deltaTime;
-        if (this.controls.left) newPos.x -= this.speed * deltaTime;
-        if (this.controls.right) newPos.x += this.speed * deltaTime;
-    
-        // Check each corner for passability
-        const { topleft, topright, bottomleft, bottomright } = this.hitboxCorners(newPos);
-        
+        let nextX = this.x
+
+        if(this.controls.left) nextX -= this.speed * deltaTime;
+        if(this.controls.right) nextX += this.speed * deltaTime;
+
+        const { topleft: topleftX, topright: toprightX, bottomleft: bottomleftX, bottomright: bottomrightX } = this.hitboxCorners({ x: nextX, y: this.y });
+
         if (
-            this.canMove(topleft, grid, itemsGrid)
-            && this.canMove(topright, grid, itemsGrid)
-            && this.canMove(bottomleft, grid, itemsGrid)
-            && this.canMove(bottomright, grid, itemsGrid)
+            this.canMove(topleftX, grid, itemsGrid) &&
+            this.canMove(toprightX, grid, itemsGrid) &&
+            this.canMove(bottomleftX, grid, itemsGrid) &&
+            this.canMove(bottomrightX, grid, itemsGrid)
         ) {
-            this.x = newPos.x;
-            this.y = newPos.y;
+            this.x = nextX;
+        }
+
+        let nextY = this.y
+        if (this.controls.up) nextY -= this.speed * deltaTime;
+        if (this.controls.down) nextY += this.speed * deltaTime;
+
+        const { topleft: topleftY, topright: toprightY, bottomleft: bottomleftY, bottomright: bottomrightY } = this.hitboxCorners({ x: this.x, y: nextY });
+
+        if (
+            this.canMove(topleftY, grid, itemsGrid) &&
+            this.canMove(toprightY, grid, itemsGrid) &&
+            this.canMove(bottomleftY, grid, itemsGrid) &&
+            this.canMove(bottomrightY, grid, itemsGrid)
+        ) {
+            this.y = nextY;
         }
     }
 
