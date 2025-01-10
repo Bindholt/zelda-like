@@ -195,9 +195,17 @@ body {
     z-index: -1;
 } 
 
+#inventory .addColor {
+    background-color: rgb(253, 39, 39);
+}
+
 #inventory-items {
     width: 150px;
     height: 270px;
     background-color: rgb(163, 163, 163);
     outline: 2px solid black;
+}
+
+.hidden {
+    display: none;
 }

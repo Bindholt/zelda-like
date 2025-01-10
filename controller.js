@@ -87,7 +87,7 @@ function tick(time) {
     view.displayTiles();
     view.displayItems();
     view.displayInventory();
-    //showDebugging();
+    showDebugging();
 }
 
 function playerMovement(deltaTime) {

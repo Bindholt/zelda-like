@@ -129,6 +129,10 @@ function displayInventory() {
         item.innerHTML = inventory[i];
         visualInventory.appendChild(item);
     }
+
+    if(inventory.length > 0) {
+        visualInventory.classList.add("addColor");
+    }
 }
 
 /* DEBUG */
