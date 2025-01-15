@@ -34,7 +34,7 @@ body {
 #player {
     width: 32px;
     height: 40px; 
-    background-image: url('./images/character/player.png');
+    background-image: url('./assets/images/character/player.png');
     background-size: 400%;
     background-position-x: 0px;
     background-position-y: 0px;
@@ -45,7 +45,7 @@ body {
 #enemy {
     width: 32px;
     height: 40px; 
-    background-image: url('./images/character/enemy.png');
+    background-image: url('./assets/images/character/enemy.png');
     background-size: 400%;
     background-position-x: 0px;
     background-position-y: 0px;
@@ -68,56 +68,56 @@ body {
 }
 
 .flowers {
-    background-image: url('./images/tile/flowers.png');
+    background-image: url('./assets/images/tile/flowers.png');
 }
 
 .path {
-    background-image: url('./images/tiles/path.png');
+    background-image: url('./assets/images/tiles/path.png');
 }
 
 .wall {
-    background-image: url('./images/tiles/wall.png');
+    background-image: url('./assets/images/tiles/wall.png');
 }
 
 .door {
-    background-image: url('./images/items/door.png');
+    background-image: url('./assets/images/items/door.png');
 }
 
 .water {
-    background-image: url('./images/tiles/water.png');
+    background-image: url('./assets/images/tiles/water.png');
 }
 
 .tree {
-    background-image: url('./images/tiles/tree.png');
+    background-image: url('./assets/images/tiles/tree.png');
 }
 
 .floor_wood {
-    background-image: url('./images/tiles/floor_wood.png');
+    background-image: url('./assets/images/tiles/floor_wood.png');
 }
 
 .grass {
-    background-image: url('./images/tiles/grass.png');
+    background-image: url('./assets/images/tiles/grass.png');
 }
 
 .bridge {
-    background-image: url('./images/tiles/floor_planks.png');
+    background-image: url('./assets/images/tiles/floor_planks.png');
 }
 
 .pot {
-    background-image: url('./images/items/pot.png');
+    background-image: url('./assets/images/items/pot.png');
 
 }
 
 .pot_smashed {
-    background-image: url('./images/items/pot_smashed.png'); 
+    background-image: url('./assets/images/items/pot_smashed.png'); 
 }
 
 .chest {
-    background-image: url('./images/items/chest.png');
+    background-image: url('./assets/images/items/chest.png');
 }
 
 .closed_door {
-    background-image: url('./images/items/door.png');
+    background-image: url('./assets/images/items/door.png');
 }
 
 .empty {

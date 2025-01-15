@@ -4,6 +4,7 @@ import Grid from "./model/Grid.js";
 import {map as level1 } from "./model/maps/map1.js";
 import {items as itemsLevel1} from "./model/maps/items1.js";
 import * as view from "./view.js";
+//import * as tf from "@tensorflow/tfjs";
 
 window.addEventListener('load', start);
 
@@ -14,6 +15,7 @@ let itemsGrid;
 let currentInteractable;
 let lastAnimationFrame;
 function start() {
+    console.log("TensorFlow.js loaded: ", tf.version);
     initializeLevel();
     /* DEBUG */
     window.grid = grid;
