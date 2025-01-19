@@ -14,6 +14,7 @@ let grid;
 let itemsGrid;
 let currentInteractable;
 let lastAnimationFrame;
+let modelMove = "w";
 async function start() {
     console.log("Controller.js");
 
@@ -99,6 +100,25 @@ function tick(time) {
 }
 
 function playerMovement(deltaTime) {
+     // Handle model movement
+     if (view.toggle) {
+        switch (view.modelMove) {
+            case 'w':
+                player.controls = { up: true, down: false, left: false, right: false };
+                break;
+            case 'a':
+                player.controls = { up: false, down: false, left: true, right: false };
+                break;
+            case 's':
+                player.controls = { up: false, down: true, left: false, right: false };
+                break;
+            case 'd':
+                player.controls = { up: false, down: false, left: false, right: true };
+                break;
+            default:
+                player.controls = { up: false, down: false, left: false, right: false };
+        }
+    }
     player.look();
     player.move(deltaTime, grid, itemsGrid);
     if (player.isCollidingWith(enemy)) {
@@ -123,51 +143,53 @@ function playerMovement(deltaTime) {
     }
 
     view.displayCharacter(player);
+   
 }
 
 let pathCycle = 0;
-function enemyMovement(deltaTime) {
-    const path = [
-        { x: 250, y: 50 },
-        { x: 100, y: 50 }
-    ]; 
+// function enemyMovement(deltaTime) {
+//     const path = [
+//         { x: 250, y: 50 },
+//         { x: 100, y: 50 }
+//     ]; 
 
-    enemy.look();
+//     enemy.look();
 
-    if (pathCycle === 0) {
-        enemy.controls = {
-            up: false,
-            down: false,
-            left: true,
-            right: false,
-        };
-        enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize}, itemsGrid);
+//     if (pathCycle === 0) {
+//         enemy.controls = {
+//             up: false,
+//             down: false,
+//             left: true,
+//             right: false,
+//         };
+//         enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize}, itemsGrid);
 
-        if (enemy.x <= path[1].x) {
-            pathCycle = 1;
-        }
-    }
+//         if (enemy.x <= path[1].x) {
+//             pathCycle = 1;
+//         }
+//     }
 
-    else if (pathCycle === 1) {
-        enemy.controls = {
-            up: false,
-            down: false,
-            left: false,
-            right: true,
-        };
-        enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize}, itemsGrid);
+//     else if (pathCycle === 1) {
+//         enemy.controls = {
+//             up: false,
+//             down: false,
+//             left: false,
+//             right: true,
+//         };
+//         enemy.move(deltaTime, {width: grid.cols() * grid.tileSize, height: grid.rows() * grid.tileSize}, itemsGrid);
 
-        if (enemy.x >= path[0].x) {
-            pathCycle = 0;
-        }
-    }
+//         if (enemy.x >= path[0].x) {
+//             pathCycle = 0;
+//         }
+//     }
 
-    view.displayCharacter(enemy);
-}
+//     view.displayCharacter(enemy);
+// }
 
 
-function interact() {
+async function interact() {
     if(currentInteractable) {
+        await new Promise(resolve => setTimeout(resolve, 50));
         //If pot, add whats inside pot to inventory and smash pot
         if(currentInteractable.type === 1 && currentInteractable.inventory.length > 0) {
             player.addToInventory(currentInteractable.inventory);

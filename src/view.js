@@ -2,8 +2,9 @@ import * as controller from "./controller.js";
 import * as api from "./apiTools.js";
 import { tileTypes } from "./model/maps/map1.js";
 import { itemTypes } from "./model/maps/items1.js";
-let toggle = false;
+export let toggle = false;
 let maxCalls = 0;
+export let modelMove = "w";
 
 function init() {
     console.log("Hi from view.js");
@@ -15,6 +16,7 @@ function init() {
 async function promptApi() {
     console.log("Prompting API...");
     let move = await api.getPredictedMove();
+    modelMove = move;
     console.log("Got move:", move);
 }
 
