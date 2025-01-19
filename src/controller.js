@@ -4,6 +4,7 @@ import Grid from "./model/Grid.js";
 import {map as level1 } from "./model/maps/map1.js";
 import {items as itemsLevel1} from "./model/maps/items1.js";
 import * as view from "./view.js";
+import * as api from "./apiTools.js";
 
 window.addEventListener('load', start);
 
@@ -14,8 +15,14 @@ let itemsGrid;
 let currentInteractable;
 let lastAnimationFrame;
 async function start() {
-    console.log("TensorFlow.js loaded: ", tf.version);
-    const model = await loadModel();
+    console.log("Controller.js");
+
+    view.init();
+    try {
+        await api.init();
+    } catch (error) {
+        console.error("Error during initialization:", error);
+    }
     
     initializeLevel();
     /* DEBUG */
@@ -27,7 +34,6 @@ async function start() {
     window.view = view;
     window.initializeLevel = initializeLevel;
 }
-
 
 function initializeLevel() {
     resetGameState() 
@@ -199,19 +205,6 @@ function getRandomStartingPosition() {
 
     return getRandomStartingPosition();
 }
-
-/* AI Model */
-async function loadModel() {
-    try {
-        const modelPath = 'assets/model/model.json'; // Path to your model.json file
-        const model = await tf.loadLayersModel(modelPath);
-        console.log('Model loaded successfully:', model);
-        return model;
-    } catch (error) {
-        console.error('Error loading the model:', error);
-    }
-}
-
 
 export {
     interact,

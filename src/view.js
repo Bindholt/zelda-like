@@ -2,6 +2,10 @@ import * as controller from "./controller.js";
 import { tileTypes } from "./model/maps/map1.js";
 import { itemTypes } from "./model/maps/items1.js";
 
+function init() {
+    console.log("Hi from view.js");
+    
+}
 function attatchEventListeners() {
     window.addEventListener("keydown", (e) => {
         switch (e.key) {
@@ -182,6 +186,7 @@ function debugShowHitbox(character) {
 }
 
 export {
+    init,
     attatchEventListeners,
     displayCharacter,
     createItems,
