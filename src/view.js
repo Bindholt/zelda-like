@@ -1,10 +1,46 @@
 import * as controller from "./controller.js";
+import * as api from "./apiTools.js";
 import { tileTypes } from "./model/maps/map1.js";
 import { itemTypes } from "./model/maps/items1.js";
+let toggle = false;
+let maxCalls = 0;
 
 function init() {
     console.log("Hi from view.js");
     
+    document.querySelector("#testApi").addEventListener("click", promptApi);
+    document.querySelector("#toggleModel").addEventListener("click", toggleModel);
+}
+
+async function promptApi() {
+    console.log("Prompting API...");
+    let move = await api.getPredictedMove();
+    console.log("Got move:", move);
+}
+
+async function toggleModel() {
+    toggle = !toggle;
+    console.log("Toggling");
+    maxCalls = 0;
+    
+    let btnHtml = document.querySelector("#toggleModel")
+    btnHtml.classList.remove("on", "off");
+    if (toggle) {
+        btnHtml.classList.add("on");
+    } else {
+        btnHtml.classList.add("off");
+    }
+    while (toggle) {
+        await promptApi();
+        maxCalls++;
+        if (maxCalls > 50) {
+            toggle = false;
+            btnHtml.classList.remove("on", "off");
+            btnHtml.classList.add("off");
+            console.log("Max calls reached");
+            
+        }
+    }
 }
 function attatchEventListeners() {
     window.addEventListener("keydown", (e) => {

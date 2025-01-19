@@ -23,7 +23,6 @@ async function start() {
     } catch (error) {
         console.error("Error during initialization:", error);
     }
-    
     initializeLevel();
     /* DEBUG */
     window.grid = grid;

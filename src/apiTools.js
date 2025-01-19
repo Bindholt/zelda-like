@@ -10,7 +10,8 @@ export async function init(){
 }
 
 // Simple script to prediction
-async function getPredictedMove() {
+export async function getPredictedMove() {
+    let move;
     try {
         // Make a GET request to the Flask server's /predict endpoint
         const response = await fetch('http://127.0.0.1:5000/predict');
@@ -23,14 +24,16 @@ async function getPredictedMove() {
         const data = await response.json();
 
         // Access the predicted input from the response
-        console.log(`Predicted input: ${data.input}`);
+        // console.log(`Predicted input: ${data.input}`);
 
+        move = data.input;
         // Use the predicted move (e.g., simulate a key press)
         performAction(data.input);
 
     } catch (error) {
         console.error('Error fetching prediction:', error);
     }
+    return move
 }
 
 // Simulate an action based on the predicted input
